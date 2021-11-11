@@ -1,0 +1,4 @@
+moment is used to format dates and times
+socket.io is used to deal with web sockets
+express is a server framework that is built on top of Node
+nodemon -D is a dev dependency that restarts the server whenever a change is made

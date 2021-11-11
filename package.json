@@ -1,0 +1,20 @@
+{
+  "name": "realtime_chat_application",
+  "version": "1.0.0",
+  "description": "Real time chat application with groups where you can talk with whoever you want, whenever",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "author": "Jacob Graham",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "moment": "^2.29.1",
+    "socket.io": "^4.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
