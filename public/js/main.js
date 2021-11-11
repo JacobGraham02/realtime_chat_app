@@ -1,5 +1,7 @@
 const chatForm = document.getElementById("chat-form");
 const chatMessages = document.querySelector('.chat-messages');
+const roomName = document.getElementById('room-name');
+const userList = document.getElementById('users');
 
 // Get username and its associated room via the url
 const {username, room} = Qs.parse(location.search, {
@@ -10,6 +12,12 @@ const socket = io();
 
 // Emit an event on the server called joinRoom, which redirects a given user to the room they specified
 socket.emit('joinRoom', {username, room});
+
+// Get room and users in the room
+socket.on('roomUsers', ({room, users}) => {
+    outputRoomName(room);
+    outputUsers(users);
+});
 
 // Each time something is sent with an id of {message}, socketio will output this to the console
 socket.on('message', message => {
@@ -44,5 +52,16 @@ function outputMessage(message) {
         ${message.textMessage}
     </p>`;
     document.querySelector('.chat-messages').appendChild(div);
+}
+// Add the room name to the DOM
+function outputRoomName(room) {
+    roomName.innerText = room;
+}
 
+// Add the users to the left side of GUI in the DOM
+function outputUsers(users) {
+    // Map through each of the users in the array, and output an li element. Join method is used to attach several array elements together. 
+    userList.innerHTML = `
+        ${users.map(user => `<li>${user.username}</li>`).join('')} 
+    `;
 }

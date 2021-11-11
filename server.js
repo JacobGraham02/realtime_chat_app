@@ -31,6 +31,12 @@ io.on('connection', socket => {
         // Broadcast when a user connects to the application
         // broadcast.emit sends a message to every client except for the currently connected one
         socket.broadcast.to(user.room).emit('message', formatMessage(botName, `${user.username} has joined the chat`));
+
+        // Send users and room info onto the left side of GUI 
+        io.to(user.room).emit('roomUsers', {
+           room: user.room,
+           users: getRoomUsers(user.room) 
+        });
     });
     // Listen for any outgoing messages with an id of chatMessage. We want this method to send a reponse back to everybody containing the chatMessage text
     socket.on('chatMessage', (msg) => {
@@ -44,7 +50,13 @@ io.on('connection', socket => {
         const user = userLeave(socket.id);
         if (user) {
             io.to(user.room).emit('message', formatMessage(botName, `${user.username} has left the chat`));
-        }
+        };
+
+        // Send users and room info onto the left side of GUI
+        io.to(user.room).emit('roomUsers', {
+           room: user.room,
+           users: getRoomUsers(user.room) 
+        });
     });
 });
 
