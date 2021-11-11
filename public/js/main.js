@@ -1,10 +1,14 @@
 const chatForm = document.getElementById("chat-form");
+const chatMessages = document.querySelector('.chat-messages');
 
 const socket = io();
 
 // Each time something is sent with an id of {message}, socketio will output this to the console
 socket.on('message', message => {
     outputMessage(message);
+
+    // Each time a message appears in the application, scroll down
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 
 // Event listener to listen for the submission of a message
@@ -15,6 +19,10 @@ chatForm.addEventListener('submit', (e) => {
     
     // Emit (send) a message called chatMessage to the server 
     socket.emit('chatMessage', msg);
+
+    // After emitting chat message to the server, clear the input box and focus on the input box element
+    e.target.elements.msg.value = "";
+    e.target.elements.msg.focus();
 });
 
 // Ouput the specified message to the DOM
@@ -23,9 +31,9 @@ chatForm.addEventListener('submit', (e) => {
 function outputMessage(message) {
     const div = document.createElement('div');
     div.classList.add('message');
-    div.innerHTML = `<p class="meta">Brad <span>9:12pm</span></p>
+    div.innerHTML = `<p class="meta">${message.username}<span>  ${message.time}</span></p>
     <p class="text">
-        ${message}
+        ${message.textMessage}
     </p>`;
     document.querySelector('.chat-messages').appendChild(div);
 
