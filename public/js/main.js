@@ -1,7 +1,15 @@
 const chatForm = document.getElementById("chat-form");
 const chatMessages = document.querySelector('.chat-messages');
 
+// Get username and its associated room via the url
+const {username, room} = Qs.parse(location.search, {
+    ignoreQueryPrefix: true // This ignores any of the characters such as ampersand which are not the actual query strings 
+});
+
 const socket = io();
+
+// Emit an event on the server called joinRoom, which redirects a given user to the room they specified
+socket.emit('joinRoom', {username, room});
 
 // Each time something is sent with an id of {message}, socketio will output this to the console
 socket.on('message', message => {
